@@ -1,34 +1,26 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
-	"net/http"
+	"log"
+	"os"
+
+	"github.com/petersonsalme/golang-rest-api/redis"
+	"github.com/petersonsalme/golang-rest-api/router"
+
+	"github.com/gin-gonic/gin"
 )
 
-type Article struct {
-	Title   string `json:"titulo"`
-	Desc    string `json:"descricao"`
-	Content string `json:"conteudo"`
-}
+var routerEngine *gin.Engine
 
-type Articles []Article
+func init() {
+	os.Setenv("ACCESS_SECRET", "123456789ABCDEF")
+	os.Setenv("REFRESH_SECRET", "987654321FEDCBA")
 
-func allArticles(w http.ResponseWriter, r *http.Request) {
-	articles := Articles{
-		Article{Title: "How to build a RESTful api with Go", Desc: "Descrição artigo de Go", Content: "Conteudo"},
-	}
-
-	fmt.Fprintln(w, "All Articles:")
-	json.NewEncoder(w).Encode(articles)
-}
-
-func helloWorld(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "Hello World!")
+	redis.Connect()
+	routerEngine = gin.Default()
 }
 
 func main() {
-	http.HandleFunc("/", helloWorld)
-	http.HandleFunc("/articles", allArticles)
-	http.ListenAndServe(":8081", nil)
+	routerEngine.POST("/login", router.Login)
+	log.Fatal(routerEngine.Run(":8080"))
 }
