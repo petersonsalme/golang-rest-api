@@ -1,6 +1,7 @@
 package redis
 
 import (
+	"log"
 	"os"
 	"strconv"
 	"time"
@@ -24,7 +25,7 @@ func Connect() *redis.Client {
 	})
 
 	if _, err := client.Ping().Result(); err != nil {
-		panic(err)
+		log.Fatal(err.Error())
 	}
 
 	return client

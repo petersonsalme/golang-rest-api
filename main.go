@@ -2,8 +2,8 @@ package main
 
 import (
 	"log"
-	"os"
 
+	"github.com/joho/godotenv"
 	"github.com/petersonsalme/golang-rest-api/middleware"
 
 	"github.com/petersonsalme/golang-rest-api/redis"
@@ -15,10 +15,13 @@ import (
 var routerEngine *gin.Engine
 
 func init() {
-	os.Setenv("ACCESS_SECRET", "123456789ABCDEF")
-	os.Setenv("REFRESH_SECRET", "987654321FEDCBA")
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 
 	redis.Connect()
+
 	routerEngine = gin.Default()
 }
 
