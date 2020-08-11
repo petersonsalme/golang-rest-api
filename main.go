@@ -4,6 +4,8 @@ import (
 	"log"
 	"os"
 
+	"github.com/petersonsalme/golang-rest-api/middleware"
+
 	"github.com/petersonsalme/golang-rest-api/redis"
 	"github.com/petersonsalme/golang-rest-api/router"
 
@@ -22,7 +24,10 @@ func init() {
 
 func main() {
 	routerEngine.POST("/login", router.Login)
-	routerEngine.POST("/todo", router.CreateTodo)
+	routerEngine.POST("/logout", middleware.TokenAuthMiddleware(), router.Logout)
+	routerEngine.POST("/token/refresh", middleware.Refresh)
+
+	routerEngine.POST("/todo", middleware.TokenAuthMiddleware(), router.CreateTodo)
 
 	log.Fatal(routerEngine.Run(":8080"))
 }

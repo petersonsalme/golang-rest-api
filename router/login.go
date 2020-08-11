@@ -48,3 +48,20 @@ func Login(c *gin.Context) {
 
 	c.JSON(http.StatusOK, tokens)
 }
+
+// Logout Logout
+func Logout(c *gin.Context) {
+	au, err := middleware.ExtractTokenMetadata(c.Request)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, "unauthorized")
+		return
+	}
+
+	deleted, delErr := redis.DeleteAuth(au.AccessUUID)
+	if delErr != nil || deleted == 0 {
+		c.JSON(http.StatusUnauthorized, "unauthorized")
+		return
+	}
+
+	c.JSON(http.StatusOK, "Successfully logged out")
+}

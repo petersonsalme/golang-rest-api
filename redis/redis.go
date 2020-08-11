@@ -56,3 +56,12 @@ func FetchAuth(authD *model.AccessDetails) (uint64, error) {
 	userID, _ := strconv.ParseUint(userid, 10, 64)
 	return userID, nil
 }
+
+// DeleteAuth DeleteAuth
+func DeleteAuth(givenUUID string) (int64, error) {
+	deleted, err := client.Del(givenUUID).Result()
+	if err != nil {
+		return 0, err
+	}
+	return deleted, nil
+}
