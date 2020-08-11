@@ -22,5 +22,7 @@ func init() {
 
 func main() {
 	routerEngine.POST("/login", router.Login)
+	routerEngine.POST("/todo", router.CreateTodo)
+
 	log.Fatal(routerEngine.Run(":8080"))
 }

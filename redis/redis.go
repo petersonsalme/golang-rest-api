@@ -46,3 +46,13 @@ func CreateAuth(userid uint64, token *model.Token) error {
 	}
 	return nil
 }
+
+// FetchAuth FetchAuth
+func FetchAuth(authD *model.AccessDetails) (uint64, error) {
+	userid, err := client.Get(authD.AccessUUID).Result()
+	if err != nil {
+		return 0, err
+	}
+	userID, _ := strconv.ParseUint(userid, 10, 64)
+	return userID, nil
+}
